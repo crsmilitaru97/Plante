@@ -1,0 +1,8 @@
+<div class="col-12 text-end p-3">
+  <button pButton label="Submit" class="p-button-success" (click)="addPlant()"></button>
+</div>
+
+<p-dialog class="dialog-details" header="Editează planta" [draggable]="false" [modal]="true"
+  [(visible)]="dialogDetailsVisible">
+  <plant-details-root (cancel)="cancelEdit()" (save)="save($event)"></plant-details-root>
+</p-dialog>

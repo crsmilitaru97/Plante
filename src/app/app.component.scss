@@ -1,0 +1,9 @@
+.dialog-details {
+  width: 90vw;
+}
+
+@media (min-width: 1000px) {
+  .dialog-details {
+    width: 60vw;
+  }
+}
