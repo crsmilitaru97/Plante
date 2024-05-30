@@ -32,6 +32,19 @@ ul {
   padding: 0;
   margin: 0;
 }
+
 .p-button {
   border-radius: 4px;
+}
+
+.p-dataview .p-dataview-content {
+  background: none;
+}
+
+body {
+  background-color: var(--surface-a);
+}
+
+.p-dialog-header {
+  height: 60px;
 }

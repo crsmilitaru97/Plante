@@ -1,0 +1,27 @@
+<div>
+  <div class="text-center" style="display: flex; flex-direction: column; align-items: center;">
+    <img #imgPreview height="128" width="128" style="object-fit: cover; border-radius: 8px;" />
+    <div class="mt-4 m-1" style="max-width: fit-content;">
+      <button pButton label="Alege poză" (click)="fileInput.click()" icon="pi pi-image"> </button>
+    </div>
+    <div class="m-1" style="max-width: fit-content;">
+      <button pButton label="Fotografiază" (click)="cameraInput.click()" icon="pi pi-camera"> </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="col-12 text-end m-2">
+    <button pButton label="Adaugă detalii" class="p-button-success ms-2" (click)="continueSaving()"
+      icon="pi pi-angle-right" iconPos="right"></button>
+  </div>
+</div>
+
+<p-dialog class="dialog-details" header="Editează planta" [draggable]="false" [modal]="true"
+  [(visible)]="dialogDetailsVisible">
+  <plant-details [planta]="planta" (save)="save(planta)"></plant-details>
+</p-dialog>
+
+<input type="file" #cameraInput (change)="onFileSelected($event)" accept="image/*" capture="environment"
+  style="display: none;" />
+<input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;" />

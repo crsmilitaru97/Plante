@@ -1,8 +1,27 @@
-<div class="col-12 text-end p-3">
-  <button pButton label="Submit" class="p-button-success" (click)="addPlant()"></button>
+<p-toast position="top-center"></p-toast>
+
+<div style="height: 74px">
+  <div class="col-12 text-end p-3">
+    <button pButton label="Adaugă" class="p-button-success" (click)="addPlant()" icon="pi pi-plus"></button>
+  </div>
+</div>
+
+<div class="ps-1 pe-1 overflow-auto" style="height: calc(100vh - 74px);">
+  <div *ngFor="let item of plante" class="list-item" (click)="editPlant(item)">
+    <img [src]="item.preview" class="preview-image" />
+    <div style="flex-direction: column;">
+      <h5 class="">{{ item.denumireStintifica }}</h5>
+      <h6 class="" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
+    </div>
+  </div>
 </div>
 
 <p-dialog class="dialog-details" header="Editează planta" [draggable]="false" [modal]="true"
   [(visible)]="dialogDetailsVisible">
-  <plant-details-root (cancel)="cancelEdit()" (save)="save($event)"></plant-details-root>
+  <plant-details (cancel)="closeDialogs()" (save)="save($event)" [planta]="plantaSelectata"></plant-details>
+</p-dialog>
+
+<p-dialog class="dialog-details" header="Caută planta" [draggable]="false" [modal]="true"
+  [(visible)]="dialogSearchPlantVisible">
+  <search-plant-image (cancel)="closeDialogs()" (save)="save($event)" [planta]="plantaSelectata"></search-plant-image>
 </p-dialog>

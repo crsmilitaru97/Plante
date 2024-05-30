@@ -33,6 +33,7 @@
               "bootstrap/dist/css/bootstrap.min.css",
               "primeng/resources/primeng.min.css",
               "primeng/resources/themes/bootstrap4-light-blue/theme.css",
+              "primeicons/primeicons.css",
               "src/styles.scss"
             ],
             "scripts": [
@@ -45,7 +46,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",

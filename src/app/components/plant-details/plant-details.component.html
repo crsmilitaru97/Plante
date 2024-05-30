@@ -1,56 +1,50 @@
-<div class="">
+<div>
   <div class="row">
     <div class="col-md-6 col-lg-4 col-xl-3 button-col">
-
-      <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria10.jpg" height="128" />
+      <span class="p-float-label">
+        <input pInputText [(ngModel)]="planta.denumireStintifica" />
+        <label>Denumire știntifică</label>
+      </span>
+    </div>
+    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
+      <span class="p-float-label">
+        <input pInputText [(ngModel)]="planta.denumirePopulara" />
+        <label>Denumire populară</label>
+      </span>
+    </div>
+    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
+      <span class="p-float-label">
+        <input pInputText [(ngModel)]="planta.locatie" />
+        <label>Locație</label>
+      </span>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-6 col-lg-4 col-xl-3 button-col">
       <span class="p-float-label">
-        <input pInputText id="denumireStintifica" [(ngModel)]="planta.denumireStintifica" autofocus />
-        <label for="denumireStintifica">Denumire știntifică</label>
+        <p-dropdown [options]="organe" [(ngModel)]="planta.organ" [showClear]="true"
+          placeholder="Selectează organ"></p-dropdown>
+        <label>Organ</label>
       </span>
     </div>
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <input pInputText id="denumirePopulara" [(ngModel)]="planta.denumirePopulara" />
-        <label for="denumirePopulara">Denumire populară</label>
-      </span>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
+    <div *ngIf="planta.organ" class="col-md-6 col-lg-4 col-xl-3 button-col">
       <span class="p-float-label">
         <p-dropdown [options]="culori" [(ngModel)]="planta.culoare" [showClear]="true"
           placeholder="Selectează o culoare"></p-dropdown>
-        <label for="organ">Culoare</label>
+        <label>Culoare</label>
       </span>
     </div>
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
+    <div *ngIf="planta.organ" class="col-md-6 col-lg-4 col-xl-3 button-col">
       <span class="p-float-label">
         <p-dropdown [options]="marimi" [(ngModel)]="planta.marime" [showClear]="true"
           placeholder="Selectează o mărime"></p-dropdown>
-        <label for="organ">Mărime</label>
-      </span>
-    </div>
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <input pInputText id="organ" [(ngModel)]="planta.organ" />
-        <label for="organ">Organ</label>
-      </span>
-    </div>
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <input pInputText id="locatie" [(ngModel)]="planta.locatie" />
-        <label for="locatie">Locație</label>
+        <label>Mărime</label>
       </span>
     </div>
   </div>
 
-  <div class="row">
+  <div>
     <div class="col-12 button-col">
       <span class="p-float-label">
         <textarea pInputTextarea id="observatii" [(ngModel)]="planta.observatii"></textarea>
@@ -60,7 +54,7 @@
   </div>
 </div>
 
-<div class="row">
+<div style="height: 74px">
   <div class="col-12 text-end m-2">
     <button pButton label="Renunță" class="p-button-secondary" (click)="cancelEdit()"></button>
     <button pButton label="Salvează" class="p-button-success ms-2" (click)="saveEdit()"></button>
