@@ -1,14 +1,21 @@
 <p-toast position="top-center"></p-toast>
 
-<div style="height: 74px">
-  <div class="col-12 text-end p-3">
-    <button pButton label="Adaugă" class="p-button-success" (click)="addPlant()" icon="pi pi-plus"></button>
+<div class="top-bar">
+  <div>
+    <button *ngIf="plante.length > 0" pButton (click)="changeViewType()" class="p-button-secondary"
+      icon="pi pi-objects-column"></button>
+  </div>
+  <div>
+    <button pButton *ngIf="plante.length > 0" label="Adaugă plantă" class="p-button-success me-2" (click)="addPlant()"
+      icon="pi pi-plus"></button>
+    <button pButton icon="pi pi-user"></button>
   </div>
 </div>
 
-<div class="ps-1 pe-1 overflow-auto" style="height: calc(100vh - 74px);">
+<div *ngIf="plante.length > 0 && viewType==='list'" class="overflow-auto list-container"
+  style="height: calc(100vh - 74px);">
   <div *ngFor="let item of plante" class="list-item" (click)="editPlant(item)">
-    <img [src]="item.preview" class="preview-image" />
+    <img [src]="item.preview" class="preview-image" loading="lazy" />
     <div style="flex-direction: column;">
       <h5 class="">{{ item.denumireStintifica }}</h5>
       <h6 class="" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
@@ -16,12 +23,30 @@
   </div>
 </div>
 
+<div *ngIf="plante.length > 0 && viewType==='grid'" class="overflow-auto grid-container"
+  style="height: calc(100vh - 74px);">
+  <div *ngFor="let item of plante" class="grid-item" (click)="editPlant(item)">
+    <img [src]="item.preview" class="preview-image" loading="lazy" />
+    <div style="flex-direction: column;">
+      <h5 class="">{{ item.denumireStintifica }}</h5>
+      <h6 class="" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="plante.length == 0" class="text-center align-content-center" style="height: calc(100vh - 74px);">
+  <h5 style="font-weight: 400;"> Momentan nu există plante salvate</h5>
+  <button pButton label="Adaugă plantă" class="p-button-success m-3" (click)="addPlant()" icon="pi pi-plus"></button>
+</div>
+
 <p-dialog class="dialog-details" header="Editează planta" [draggable]="false" [modal]="true"
   [(visible)]="dialogDetailsVisible">
   <plant-details (cancel)="closeDialogs()" (save)="save($event)" [planta]="plantaSelectata"></plant-details>
 </p-dialog>
 
-<p-dialog class="dialog-details" header="Caută planta" [draggable]="false" [modal]="true"
+<p-dialog class="dialog-photo-search" header="Caută/adaugă plantă" [draggable]="false" [modal]="true"
   [(visible)]="dialogSearchPlantVisible">
   <search-plant-image (cancel)="closeDialogs()" (save)="save($event)" [planta]="plantaSelectata"></search-plant-image>
 </p-dialog>
+
+<p-confirmDialog acceptButtonStyleClass="p-button-danger ms-2" acceptLabel="Da" rejectLabel="Nu" />

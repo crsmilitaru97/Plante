@@ -19,7 +19,7 @@ input {
 }
 
 .row {
-  margin-inline: 0.5rem;
+  margin: 0;
 }
 
 .button-col {
@@ -47,4 +47,21 @@ body {
 
 .p-dialog-header {
   height: 60px;
+}
+
+h4 {
+  font-size: 1.2rem;
+}
+
+h5 {
+  font-size: 1.1rem;
+}
+
+h6 {
+  font-size: 0.9rem;
+}
+
+a {
+  text-decoration: none !important;
+  color: var(--text-color);
 }

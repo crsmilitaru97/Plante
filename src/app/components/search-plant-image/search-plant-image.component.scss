@@ -1,0 +1,15 @@
+.preview-image {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: fit-content;
+  justify-content: space-around;
+  min-height: 100%;
+}

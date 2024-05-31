@@ -2,8 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { NgxImageCompressService } from 'ngx-image-compress';
-import { MessageService } from 'primeng/api';
-import { generateGuid } from '../utils';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { GeolocationService } from 'src/app/services/geolocation.service';
+import { culori, generateGuid, marimi, organe } from '../utils';
 
 @Component({
   selector: 'plant-details',
@@ -15,46 +16,73 @@ export class PlantDetailsComponent implements OnInit {
   @Output() public cancel = new EventEmitter();
   @Output() public save = new EventEmitter<any>();
 
-  marimi = ['Foarte mică', 'Mică', 'Medie', 'Mare', 'Foarte mare'];
-  culori = ["#FFFFFF", "#000000", "#FF0000", "#008000", "#0000FF", "#FFFF00", "#00FFFF", "#FF00FF", "#808080", "#800000", "#808000", "#000080",
-    "#800080", "#008080", "#C0C0C0", "#00FF00", "#00FFFF", "#FF00FF", "#FFA500", "#A52A2A", "#FFC0CB", "#FFD700", "#F5F5DC", "#FF7F50", "#40E0D0"
-  ];
-  organe = ['Floare', 'Fruct', 'Frunză', 'Tulpină'];
-
+  marimi = marimi;
+  culori = culori;
+  organe = organe;
 
   constructor(private db: AngularFireDatabase,
     private messageService: MessageService,
-    private imageCompress: NgxImageCompressService
+    private geolocation: GeolocationService,
+    private imageCompress: NgxImageCompressService,
+    private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
     this.planta = {};
   }
 
-  doFileInput(event: any) {
-    console.log(event);
-
-  }
-
-  cancelEdit() {
+  onCancel() {
     this.cancel.emit();
   }
 
-  saveEdit() {
-    this.planta.id = generateGuid();
+  onDelete() {
+    this.confirmationService.confirm({
+      header: 'Sunteți sigur?',
+      message: 'Sunteți sigur că doriți să ștergeți planta?',
+      accept: () => {
+        this.db.object('plante/' + this.planta.id).remove();
+        this.db.object('detalii/' + this.planta.id).remove();
+        this.messageService.add({ severity: 'success', summary: 'Succes', detail: 'Planta a fost ștearsă cu succes!' });
+        this.cancel.emit();
+      },
+      reject: () => {
+      }
+    });
+  }
 
-    this.uploadFileToFirebase('preview', this.planta.id, this.planta.imageFile);
-    this.uploadFileToFirebase('imagine', this.planta.id, this.planta.imageFile);
-    delete (this.planta.imageFile);
+  onSave() {
+    if (!this.planta.id || this.planta.id == '') {
+      delete (this.planta.imageFileURLData);
+      const imgFile = this.planta.imageFile;
+      delete (this.planta.imageFile);
 
-    this.db.object('plante/' + this.planta.id).set(this.planta);
+      this.planta.id = generateGuid();
+      this.db.object('detalii/' + this.planta.id).set(this.planta);
 
-    this.messageService.add({ severity: 'success', summary: 'Succes', detail: 'Planta a fost salvată cu succes!' });
+      const previewPlanta = {
+        denumireStintifica: this.planta.denumireStintifica,
+        denumirePopulara: this.planta.denumirePopulara
+      }
+      this.db.object('plante/' + this.planta.id).set(previewPlanta);
 
+      this.setLocation(this.planta.id);
+      this.uploadFileToFirebase('preview', previewPlanta, this.planta.id, imgFile, 'plante');
+      this.uploadFileToFirebase('imagine', this.planta, this.planta.id, imgFile, 'detalii');
+
+      this.messageService.add({ severity: 'success', summary: 'Succes', detail: 'Planta a fost salvată cu succes!' });
+    }
+    else {
+      this.db.object('detalii/' + this.planta.id).update(this.planta);
+      this.messageService.add({ severity: 'success', summary: 'Succes', detail: 'Detaliile plantei au fost modificate cu succes!' });
+    }
     this.save.emit(this.planta);
   }
 
-  async uploadFileToFirebase(path: string, id: string, file: File) {
+  addOrganPicture(organSelectat: any) {
+
+  }
+
+  async uploadFileToFirebase(path: string, planta: any, id: string, file: File, outputPath: string) {
     const storage = getStorage();
     const storageRef = ref(storage, `${path}/${id}`);
 
@@ -62,11 +90,20 @@ export class PlantDetailsComponent implements OnInit {
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
 
-      this.planta[path] = downloadURL;
-      this.db.object('plante/' + id).update(this.planta);
-
+      planta[path] = downloadURL;
+      await this.db.object(outputPath + '/' + id).update(planta);
     } catch (error) {
       console.error('Upload failed', error);
     }
+  }
+
+  async setLocation(idPlanta: string) {
+    this.geolocation.getCurrentPosition().subscribe((loc: any) => {
+      this.planta.locatie = {
+        longitudine: loc.coords.longitude,
+        latitudine: loc.coords.latitude,
+      }
+      this.db.object('detalii/' + idPlanta).update(this.planta);
+    });
   }
 }

@@ -1,62 +1,70 @@
-<div>
-  <div class="row">
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <input pInputText [(ngModel)]="planta.denumireStintifica" />
-        <label>Denumire știntifică</label>
-      </span>
+<div class="h-100 pb-2">
+  <div class="overflow-y-auto mb-3 pt-1" style="height: calc(100% - 50px);">
+    <div class="row">
+      <div class="col-md-8 col-lg-6 col-xl-5 button-col">
+        <span class="p-float-label">
+          <input pInputText [(ngModel)]="planta.denumireStintifica" [autofocus]="planta.id == ''" />
+          <label>Denumire știntifică</label>
+        </span>
+        <div class="pt-4 mt-1">
+          <span class="p-float-label">
+            <input pInputText [(ngModel)]="planta.denumirePopulara" />
+            <label>Denumire populară</label>
+          </span>
+        </div>
+        <div class="pt-4 mt-1">
+          <span class="p-float-label">
+            <textarea pInputTextarea id="observatii" [(ngModel)]="planta.observatii"></textarea>
+            <label for="observatii">Observații</label>
+          </span>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-6 col-xl-7 button-col text-center align-content-center pt-0">
+        <p-image [src]="planta.imagine || planta.imageFileURLData" class="plant-image" height="240"
+          [preview]="true"></p-image>
+      </div>
     </div>
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <input pInputText [(ngModel)]="planta.denumirePopulara" />
-        <label>Denumire populară</label>
-      </span>
-    </div>
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <input pInputText [(ngModel)]="planta.locatie" />
-        <label>Locație</label>
-      </span>
-    </div>
+    <p-tabView *ngIf="planta.floare">
+      <p-tabPanel *ngFor="let organItem of organe" header="{{organItem.label}}">
+        <div class="row">
+          <div class="col-md-8 col-lg-6 col-xl-5 button-col">
+            <span class="p-float-label">
+              <p-dropdown [options]="culori" [(ngModel)]="planta[organItem.value].culoare" [showClear]="true"
+                placeholder="Selectează o culoare"></p-dropdown>
+              <label>Culoare</label>
+            </span>
+            <div class="pt-4 mt-1">
+              <span class="p-float-label">
+                <p-dropdown [options]="marimi" [(ngModel)]="planta[organItem.value].marime" [showClear]="true"
+                  placeholder="Selectează o mărime"></p-dropdown>
+                <label>Mărime</label>
+              </span>
+            </div>
+            <div class="pt-4 mt-1">
+              <span class="p-float-label">
+                <textarea pInputTextarea id="observatii" [(ngModel)]="planta[organItem.value].observatii"></textarea>
+                <label for="observatii">Observații {{organItem.value}}</label>
+              </span>
+            </div>
+          </div>
+          <div class="col-md-4 col-lg-6 col-xl-7 button-col text-center align-content-center pt-0">
+            <p-image *ngIf="planta[organItem.value].imagine" [src]="planta[organItem.value].imagine" class="plant-image"
+              height="220" [preview]="true"></p-image>
+            <button *ngIf="!planta[organItem.value].imagine" pButton label="Adaugă poză {{organItem.value}}"
+              class="p-button-secondary m-4" (click)="addOrganPicture(organItem)" icon="pi pi-image"></button>
+          </div>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
   </div>
 
-  <div class="row">
-    <div class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <p-dropdown [options]="organe" [(ngModel)]="planta.organ" [showClear]="true"
-          placeholder="Selectează organ"></p-dropdown>
-        <label>Organ</label>
-      </span>
+  <div class="actions-bar">
+    <div>
+      <button *ngIf="planta.id !=''" pButton class="p-button-danger" (click)="onDelete()" icon="pi pi-trash"></button>
     </div>
-    <div *ngIf="planta.organ" class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <p-dropdown [options]="culori" [(ngModel)]="planta.culoare" [showClear]="true"
-          placeholder="Selectează o culoare"></p-dropdown>
-        <label>Culoare</label>
-      </span>
+    <div>
+      <button pButton label="Renunță" class="p-button-secondary" (click)="onCancel()" icon="pi pi-undo"></button>
+      <button pButton label="Salvează" class="p-button-success ms-2" (click)="onSave()" icon="pi pi-save"></button>
     </div>
-    <div *ngIf="planta.organ" class="col-md-6 col-lg-4 col-xl-3 button-col">
-      <span class="p-float-label">
-        <p-dropdown [options]="marimi" [(ngModel)]="planta.marime" [showClear]="true"
-          placeholder="Selectează o mărime"></p-dropdown>
-        <label>Mărime</label>
-      </span>
-    </div>
-  </div>
-
-  <div>
-    <div class="col-12 button-col">
-      <span class="p-float-label">
-        <textarea pInputTextarea id="observatii" [(ngModel)]="planta.observatii"></textarea>
-        <label for="observatii">Observații</label>
-      </span>
-    </div>
-  </div>
-</div>
-
-<div style="height: 74px">
-  <div class="col-12 text-end m-2">
-    <button pButton label="Renunță" class="p-button-secondary" (click)="cancelEdit()"></button>
-    <button pButton label="Salvează" class="p-button-success ms-2" (click)="saveEdit()"></button>
   </div>
 </div>

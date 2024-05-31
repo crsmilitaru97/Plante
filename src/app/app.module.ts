@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 import { NgxImageCompressService } from 'ngx-image-compress';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
@@ -20,6 +20,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlantDetailsComponent } from './components/plant-details/plant-details.component';
 import { SearchplantImageComponent } from './components/search-plant-image/search-plant-image.component';
+import { TabViewModule } from 'primeng/tabview';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCl1FBtBcDb_wfZpQH-zbmB0ffgWXpn35A",
@@ -56,9 +58,12 @@ const storage = getStorage(app);
     DialogModule,
     ImageModule,
     DataViewModule,
-    ToastModule
+    ToastModule,
+    TabViewModule,
+    ImageModule,
+    ConfirmDialogModule
   ],
-  providers: [MessageService, NgxImageCompressService],
+  providers: [ConfirmationService, MessageService, NgxImageCompressService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

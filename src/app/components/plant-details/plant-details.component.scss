@@ -1,0 +1,12 @@
+.actions-bar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.plant-image {
+
+  ::ng-deep .p-image-preview-indicator,
+  ::ng-deep img {
+    border-radius: 6px;
+  }
+}

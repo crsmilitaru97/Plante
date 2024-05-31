@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import 'firebase/database';
+import { organe, setAllOrgans } from './components/utils';
 
 @Component({
   selector: 'app-root',
@@ -12,8 +13,9 @@ export class AppComponent implements OnInit {
   dialogDetailsVisible: boolean = false;
   plante: any[] = [];
   plantaSelectata: any;
-  mobile: boolean = false;
+  viewType: string = 'grid';
   dialogSearchPlantVisible: boolean = false;
+  organe = organe;
 
   constructor(
     private db: AngularFireDatabase,
@@ -22,22 +24,31 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
 
-    //if (window.screen.width < 1000) {
-    this.mobile = true;
-    //}
+    if (window.screen.width < 1000) {
+      this.viewType = 'list';
+    }
   }
 
   loadData() {
     this.db.object('plante').valueChanges().subscribe((plante: any) => {
       if (plante) {
         this.plante = Object.values(plante);
+        for (let i = 0; i < this.plante.length; i++) {
+          this.plante[i].id = Object.keys(plante)[i];
+        }
       }
     });
   }
 
-  editPlant(plant: any) {
-    this.plantaSelectata = plant;
-    this.dialogDetailsVisible = true;
+  editPlant(selectata: any) {
+    this.db.object('detalii/' + selectata.id).valueChanges()
+      .subscribe((plant: any) => {
+        if (plant) {
+          this.plantaSelectata = plant;
+          setAllOrgans(this.plantaSelectata);
+          this.dialogDetailsVisible = true;
+        }
+      });
   }
 
   addPlant() {
@@ -54,6 +65,13 @@ export class AppComponent implements OnInit {
 
     this.dialogDetailsVisible = false;
 
+  }
+
+  changeViewType() {
+    if (this.viewType === "list") {
+      this.viewType = "grid";
+    }
+    else this.viewType = "list";
   }
 }
 

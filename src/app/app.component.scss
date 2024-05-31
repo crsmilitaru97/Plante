@@ -1,5 +1,57 @@
+.top-bar {
+  height: 74px;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  flex-wrap: wrap;
+  padding-inline: 2%;
+}
+
+.list-container {
+  width: 100%;
+  justify-content: center;
+  align-content: start;
+  place-items: center;
+  padding-inline: 2%;
+}
+
 .list-item {
   display: flex;
+  align-items: center;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 0;
+
+  .preview-image {
+    width: 90px;
+    height: 80px;
+    margin-right: 14px;
+    object-fit: cover;
+    border-radius: 8px 0 0 8px;
+  }
+}
+
+.grid-container {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 140px));
+  grid-auto-rows: 180px;
+  gap: 10px;
+  justify-content: center;
+  align-content: start;
+  place-items: center;
+  padding-inline: 2%;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  width: 130px;
+  height: 170px;
   align-items: center;
   margin: 6px;
   cursor: pointer;
@@ -7,40 +59,41 @@
   box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 0;
+  transition: transform 0.2s;
+
+  .preview-image {
+    padding-bottom: 8px;
+    width: 130px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+  }
 }
 
-.grid-item {
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: space-between;
-  margin: 8px;
-  margin-inline: 0;
-  border: none;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.025);
-  border-radius: 8px;
-  padding: 0;
+.grid-item:hover {
+  transform: scale(1.05);
 }
 
-.preview-image {
-  width: 90px;
-  height: 80px;
-  margin-right: 14px;
-  object-fit: cover;
-  border-radius: 8px 0 0 8px;
+.dialog-photo-search {
+  ::ng-deep .p-dialog {
+    min-width: 40%;
+    min-height: fit-content;
+    max-height: none !important;
+  }
 }
-
 
 .dialog-details {
   ::ng-deep .p-dialog {
-    min-width: 40%;
+    min-width: 50%;
     min-height: 40%;
+    height: fit-content;
     max-height: none !important;
   }
 }
 
 @media (max-width: 1000px) {
+
+  .dialog-photo-search,
   .dialog-details {
     ::ng-deep .p-dialog {
       width: 100%;

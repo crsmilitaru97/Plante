@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { organe, setAllOrgans } from '../utils';
 
 @Component({
   selector: 'search-plant-image',
@@ -11,6 +12,7 @@ export class SearchplantImageComponent implements OnInit {
   @Output() public imageFile = new EventEmitter<any>();
   @ViewChild('imgPreview') imgPreview!: ElementRef;
   file: any = null;
+  organe = organe;
 
   dialogDetailsVisible: boolean = false;
 
@@ -25,6 +27,7 @@ export class SearchplantImageComponent implements OnInit {
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         this.imgPreview.nativeElement.src = e.target?.result as string;
+        this.planta.imageFileURLData = e.target?.result
       };
       reader.readAsDataURL(this.file);
     }
@@ -32,13 +35,20 @@ export class SearchplantImageComponent implements OnInit {
 
   continueSaving() {
     this.planta.imageFile = this.file;
+    this.planta.id = '';
+    setAllOrgans(this.planta);
     this.dialogDetailsVisible = true;
+    this.resetForm();
   }
 
-  save(planta: any) {
+  onSave(planta: any) {
     this.dialogDetailsVisible = false;
-    this.imgPreview.nativeElement.src = '';
     this.cancel.emit();
+  }
+
+  resetForm() {
+    this.imgPreview.nativeElement.src = '';
+    this.file = null;
   }
 }
 
