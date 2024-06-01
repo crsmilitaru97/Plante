@@ -11,32 +11,33 @@
     <button pButton icon="pi pi-user"></button>
   </div>
 </div>
+<div style="height: calc(100vh - 74px);">
+  <p-progressSpinner class="loading" *ngIf="isLoading"></p-progressSpinner>
 
-<div *ngIf="plante.length > 0 && viewType==='list'" class="overflow-auto list-container"
-  style="height: calc(100vh - 74px);">
-  <div *ngFor="let item of plante" class="list-item" (click)="editPlant(item)">
-    <img [src]="item.preview" class="preview-image" loading="lazy" />
-    <div style="flex-direction: column;">
-      <h5 class="">{{ item.denumireStintifica }}</h5>
-      <h6 class="" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
+  <div *ngIf="!isLoading && plante.length > 0 && viewType==='list'" class="overflow-auto list-container h-100">
+    <div *ngFor="let item of plante" class="list-item" (click)="editPlant(item)">
+      <img [src]="item.preview" class="preview-image" loading="lazy" />
+      <div style="flex-direction: column;">
+        <h5 class="">{{ item.denumireStintifica }}</h5>
+        <h6 class="" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
+      </div>
     </div>
   </div>
-</div>
 
-<div *ngIf="plante.length > 0 && viewType==='grid'" class="overflow-auto grid-container"
-  style="height: calc(100vh - 74px);">
-  <div *ngFor="let item of plante" class="grid-item" (click)="editPlant(item)">
-    <img [src]="item.preview" class="preview-image" loading="lazy" />
-    <div style="flex-direction: column;">
-      <h5 class="">{{ item.denumireStintifica }}</h5>
-      <h6 class="" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
+  <div *ngIf="!isLoading && plante.length > 0 && viewType==='grid'" class="overflow-auto grid-container h-100 pt-3">
+    <div *ngFor="let item of plante" class="grid-item" (click)="editPlant(item)">
+      <img [src]="item.preview" class="preview-image" loading="lazy" />
+      <div class="text-start ps-2 w-100">
+        <h5>{{ item.denumireStintifica }}</h5>
+        <h6 style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
+      </div>
     </div>
   </div>
-</div>
 
-<div *ngIf="plante.length == 0" class="text-center align-content-center" style="height: calc(100vh - 74px);">
-  <h5 style="font-weight: 400;"> Momentan nu există plante salvate</h5>
-  <button pButton label="Adaugă plantă" class="p-button-success m-3" (click)="addPlant()" icon="pi pi-plus"></button>
+  <div *ngIf="!isLoading && plante.length == 0" class="text-center align-content-center h-100">
+    <h5 style="font-weight: 400;"> Momentan nu există plante salvate</h5>
+    <button pButton label="Adaugă plantă" class="p-button-success m-3" (click)="addPlant()" icon="pi pi-plus"></button>
+  </div>
 </div>
 
 <p-dialog class="dialog-details" header="Editează planta" [draggable]="false" [modal]="true"
@@ -49,4 +50,5 @@
   <search-plant-image (cancel)="closeDialogs()" (save)="save($event)" [planta]="plantaSelectata"></search-plant-image>
 </p-dialog>
 
-<p-confirmDialog acceptButtonStyleClass="p-button-danger ms-2" acceptLabel="Da" rejectLabel="Nu" />
+<p-confirmDialog acceptButtonStyleClass="p-button-danger ms-2" rejectButtonStyleClass="p-button-secondary"
+  acceptLabel="Da" rejectLabel="Nu" />

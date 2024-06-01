@@ -1,27 +1,28 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
-import { NgxImageCompressService } from 'ngx-image-compress';
+import { ColorPickerModule } from 'ngx-color-picker';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DataViewModule } from 'primeng/dataview';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { ImageModule } from 'primeng/image';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PlantDetailsComponent } from './components/plant-details/plant-details.component';
 import { SearchplantImageComponent } from './components/search-plant-image/search-plant-image.component';
-import { TabViewModule } from 'primeng/tabview';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCl1FBtBcDb_wfZpQH-zbmB0ffgWXpn35A",
@@ -61,9 +62,11 @@ const storage = getStorage(app);
     ToastModule,
     TabViewModule,
     ImageModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    ColorPickerModule,
+    ProgressSpinnerModule
   ],
-  providers: [ConfirmationService, MessageService, NgxImageCompressService],
+  providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

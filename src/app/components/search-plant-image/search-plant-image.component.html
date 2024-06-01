@@ -1,6 +1,6 @@
 <div class="text-center content">
   <div class="text-center" style="display: flex; flex-direction: column; align-items: center;">
-    <img #imgPreview *ngIf="file" class="preview-image mb-3" />
+    <p-image *ngIf="planta.imageURL" [src]="planta.imageURL" class="plant-image mb-3" height="140"></p-image>
     <div class="m-1" style="max-width: fit-content;">
       <button pButton label="Alege o poză" (click)="fileInput.click()" icon="pi pi-image"> </button>
     </div>
@@ -9,21 +9,21 @@
     </div>
   </div>
 
-  <div *ngIf="file" class="col-12 text-end p-3">
+  <div *ngIf="planta.imageURL" class="col-12 text-end p-3">
     <button pButton label="Adaugă detalii" class="p-button-success ms-2" (click)="continueSaving()"
       icon="pi pi-angle-right" iconPos="right"></button>
   </div>
 
-  <div *ngIf="file" class="col-12 pt-2">
+  <div *ngIf="planta.imageURL" class="col-12 pt-2">
     <h4>Plante asemănătoare</h4>
     <div *ngIf="!true" class="col-12 text-end pt-2">
-      <img #imgPreview *ngIf="file" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="file" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="file" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="file" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="file" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="file" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="file" class="preview-image mb-3" />
+      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
+      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
+      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
+      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
+      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
+      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
+      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
     </div>
     <div *ngIf="true" class="col-12 text-center p-4">
       <h5 style="font-weight: 400;"> Nu au fost găsite plante asemănătoare</h5>

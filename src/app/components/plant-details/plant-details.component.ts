@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
-import { NgxImageCompressService } from 'ngx-image-compress';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { GeolocationService } from 'src/app/services/geolocation.service';
 import { culori, generateGuid, marimi, organe } from '../utils';
@@ -15,6 +14,7 @@ export class PlantDetailsComponent implements OnInit {
   @Input() public planta: any = {};
   @Output() public cancel = new EventEmitter();
   @Output() public save = new EventEmitter<any>();
+  selectedOrganValue = organe[0].value;
 
   marimi = marimi;
   culori = culori;
@@ -23,7 +23,6 @@ export class PlantDetailsComponent implements OnInit {
   constructor(private db: AngularFireDatabase,
     private messageService: MessageService,
     private geolocation: GeolocationService,
-    private imageCompress: NgxImageCompressService,
     private confirmationService: ConfirmationService
   ) { }
 
@@ -38,7 +37,7 @@ export class PlantDetailsComponent implements OnInit {
   onDelete() {
     this.confirmationService.confirm({
       header: 'Sunteți sigur?',
-      message: 'Sunteți sigur că doriți să ștergeți planta?',
+      message: 'Sunteți sigur că doriți să ștergeți această plantă?',
       accept: () => {
         this.db.object('plante/' + this.planta.id).remove();
         this.db.object('detalii/' + this.planta.id).remove();
@@ -52,9 +51,11 @@ export class PlantDetailsComponent implements OnInit {
 
   onSave() {
     if (!this.planta.id || this.planta.id == '') {
-      delete (this.planta.imageFileURLData);
+      delete (this.planta.imageURL);
       const imgFile = this.planta.imageFile;
       delete (this.planta.imageFile);
+      const imgPreview = this.planta.imagePreview;
+      delete (this.planta.imagePreview);
 
       this.planta.id = generateGuid();
       this.db.object('detalii/' + this.planta.id).set(this.planta);
@@ -66,12 +67,17 @@ export class PlantDetailsComponent implements OnInit {
       this.db.object('plante/' + this.planta.id).set(previewPlanta);
 
       this.setLocation(this.planta.id);
-      this.uploadFileToFirebase('preview', previewPlanta, this.planta.id, imgFile, 'plante');
+      this.uploadFileToFirebase('preview', previewPlanta, this.planta.id, imgPreview, 'plante');
       this.uploadFileToFirebase('imagine', this.planta, this.planta.id, imgFile, 'detalii');
 
       this.messageService.add({ severity: 'success', summary: 'Succes', detail: 'Planta a fost salvată cu succes!' });
     }
     else {
+      const previewPlanta = {
+        denumireStintifica: this.planta.denumireStintifica,
+        denumirePopulara: this.planta.denumirePopulara
+      }
+      this.db.object('plante/' + this.planta.id).update(previewPlanta);
       this.db.object('detalii/' + this.planta.id).update(this.planta);
       this.messageService.add({ severity: 'success', summary: 'Succes', detail: 'Detaliile plantei au fost modificate cu succes!' });
     }
@@ -105,5 +111,21 @@ export class PlantDetailsComponent implements OnInit {
       }
       this.db.object('detalii/' + idPlanta).update(this.planta);
     });
+  }
+
+  selectTab(event: any) {
+    this.selectedOrganValue = this.organe[event.index].value;
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        this.planta[this.selectedOrganValue].imagine = e.target?.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 }

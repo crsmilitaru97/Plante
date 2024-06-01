@@ -65,3 +65,11 @@ a {
   text-decoration: none !important;
   color: var(--text-color);
 }
+
+.plant-image {
+
+  .p-image-preview-indicator,
+  img {
+    border-radius: 6px;
+  }
+}

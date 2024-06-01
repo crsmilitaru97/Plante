@@ -20,17 +20,17 @@
         </div>
       </div>
       <div class="col-md-4 col-lg-6 col-xl-7 button-col text-center align-content-center pt-0">
-        <p-image [src]="planta.imagine || planta.imageFileURLData" class="plant-image" height="240"
-          [preview]="true"></p-image>
+        <p-image [src]="planta.imagine || planta.imageURL" class="plant-image" height="240" [preview]="true"></p-image>
       </div>
     </div>
-    <p-tabView *ngIf="planta.floare">
+    <p-tabView *ngIf="planta.floare" (onChange)="selectTab($event)">
       <p-tabPanel *ngFor="let organItem of organe" header="{{organItem.label}}">
         <div class="row">
           <div class="col-md-8 col-lg-6 col-xl-5 button-col">
             <span class="p-float-label">
-              <p-dropdown [options]="culori" [(ngModel)]="planta[organItem.value].culoare" [showClear]="true"
-                placeholder="Selectează o culoare"></p-dropdown>
+              <input class="p-inputwrapper-filled" [(colorPicker)]="planta[organItem.value].culoare"
+                [style.background]="planta[organItem.value].culoare" [cpPresetColors]="culori" cpColorMode="presets"
+                cpAlphaChannel="disabled" />
               <label>Culoare</label>
             </span>
             <div class="pt-4 mt-1">
@@ -50,8 +50,13 @@
           <div class="col-md-4 col-lg-6 col-xl-7 button-col text-center align-content-center pt-0">
             <p-image *ngIf="planta[organItem.value].imagine" [src]="planta[organItem.value].imagine" class="plant-image"
               height="220" [preview]="true"></p-image>
-            <button *ngIf="!planta[organItem.value].imagine" pButton label="Adaugă poză {{organItem.value}}"
-              class="p-button-secondary m-4" (click)="addOrganPicture(organItem)" icon="pi pi-image"></button>
+            <div *ngIf="!planta[organItem.value].imagine" class="align-content-center m-4">
+              <h5 class="p-2">Adaugă poză {{organItem.value}}</h5>
+              <button pButton label="Din galerie" class="p-button-secondary m-1" (click)="fileInput.click()"
+                icon="pi pi-image"></button>
+              <button pButton label="Fotografie" class="p-button-secondary m-1" (click)="cameraInput.click()"
+                icon="pi pi-camera"></button>
+            </div>
           </div>
         </div>
       </p-tabPanel>
@@ -68,3 +73,7 @@
     </div>
   </div>
 </div>
+
+<input type="file" #cameraInput (change)="onFileSelected($event)" accept="image/*" capture="environment"
+  style="display: none;" />
+<input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;" />

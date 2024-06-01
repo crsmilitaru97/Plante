@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   viewType: string = 'grid';
   dialogSearchPlantVisible: boolean = false;
   organe = organe;
+  isLoading: boolean = false;
 
   constructor(
     private db: AngularFireDatabase,
@@ -30,12 +31,14 @@ export class AppComponent implements OnInit {
   }
 
   loadData() {
+    this.isLoading = true;
     this.db.object('plante').valueChanges().subscribe((plante: any) => {
       if (plante) {
         this.plante = Object.values(plante);
         for (let i = 0; i < this.plante.length; i++) {
           this.plante[i].id = Object.keys(plante)[i];
         }
+        this.isLoading = false;
       }
     });
   }
@@ -62,9 +65,7 @@ export class AppComponent implements OnInit {
   }
 
   save(planta: any) {
-
     this.dialogDetailsVisible = false;
-
   }
 
   changeViewType() {
