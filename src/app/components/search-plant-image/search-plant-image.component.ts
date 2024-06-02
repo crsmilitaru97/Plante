@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { b64toBlob, organe, resizeImage, setAllOrgans } from '../utils';
 
 @Component({
@@ -7,15 +7,11 @@ import { b64toBlob, organe, resizeImage, setAllOrgans } from '../utils';
   styleUrls: ['./search-plant-image.component.scss']
 })
 export class SearchplantImageComponent implements OnInit {
-  @Input() public planta: any = {};
-  @Output() public cancel = new EventEmitter();
-  @Output() public imageFile = new EventEmitter<any>();
+  @Output() public continueSaving = new EventEmitter();
   organe = organe;
-
-  dialogDetailsVisible: boolean = false;
+  planta: any = {};
 
   ngOnInit(): void {
-    this.planta = {};
   }
 
   onFileSelected(event: Event): void {
@@ -35,15 +31,10 @@ export class SearchplantImageComponent implements OnInit {
     }
   }
 
-  continueSaving() {
+  onContinueSaving() {
     this.planta.id = '';
     setAllOrgans(this.planta);
-    this.dialogDetailsVisible = true;
-  }
-
-  onSave(planta: any) {
-    this.dialogDetailsVisible = false;
-    this.cancel.emit();
+    this.continueSaving.emit(this.planta);
   }
 }
 

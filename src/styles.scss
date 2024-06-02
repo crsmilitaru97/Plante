@@ -66,10 +66,8 @@ a {
   color: var(--text-color);
 }
 
-.plant-image {
-
-  .p-image-preview-indicator,
-  img {
-    border-radius: 6px;
-  }
+.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

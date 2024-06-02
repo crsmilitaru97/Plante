@@ -6,3 +6,11 @@
   justify-content: space-around;
   min-height: 100%;
 }
+
+.plant-image {
+
+  ::ng-deep .p-image-preview-indicator,
+  ::ng-deep img {
+    border-radius: 6px;
+  }
+}

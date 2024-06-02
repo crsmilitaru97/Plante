@@ -3,13 +3,19 @@
     <div class="row">
       <div class="col-md-8 col-lg-6 col-xl-5 button-col">
         <span class="p-float-label">
-          <input pInputText [(ngModel)]="planta.denumireStintifica" [autofocus]="planta.id == ''" />
+          <input pInputText [(ngModel)]="planta.denumireStintifica" [autofocus]="planta.id == ''" required />
           <label>Denumire știntifică</label>
         </span>
         <div class="pt-4 mt-1">
           <span class="p-float-label">
-            <input pInputText [(ngModel)]="planta.denumirePopulara" />
+            <input pInputText [(ngModel)]="planta.denumirePopulara" required />
             <label>Denumire populară</label>
+          </span>
+        </div>
+        <div class="pt-4 mt-1">
+          <span class="p-float-label">
+            <input pInputText [(ngModel)]="planta.locatie" />
+            <label>Locație</label>
           </span>
         </div>
         <div class="pt-4 mt-1">
@@ -19,8 +25,12 @@
           </span>
         </div>
       </div>
-      <div class="col-md-4 col-lg-6 col-xl-7 button-col text-center align-content-center pt-0">
-        <p-image [src]="planta.imagine || planta.imageURL" class="plant-image" height="240" [preview]="true"></p-image>
+      <div class="col-md-4 col-lg-6 col-xl-7 button-col text-center align-content-center pt-0"
+        style="position: relative;">
+        <p-image [src]="planta.imagine || planta.imageURL" class="details-main-image " width="100%" [preview]="true"
+          appendTo="body"></p-image>
+        <button pButton class="p-button-secondary delete-photo-icon" (click)="deletePhoto(planta.imagine)"
+          icon="pi pi-trash"></button>
       </div>
     </div>
     <p-tabView *ngIf="planta.floare" (onChange)="selectTab($event)">
@@ -47,9 +57,12 @@
               </span>
             </div>
           </div>
-          <div class="col-md-4 col-lg-6 col-xl-7 button-col text-center align-content-center pt-0">
-            <p-image *ngIf="planta[organItem.value].imagine" [src]="planta[organItem.value].imagine" class="plant-image"
-              height="220" [preview]="true"></p-image>
+          <div class="col-md-4 col-lg-6 col-xl-7 button-col text-center align-content-center pt-0"
+            style="position: relative;">
+            <p-image *ngIf="planta[organItem.value].imagine" [src]="planta[organItem.value].imagine"
+              class="details-sec-image " width="100%" [preview]="true" appendTo="body"></p-image>
+            <button *ngIf="planta[organItem.value].imagine" pButton class="p-button-secondary delete-photo-icon"
+              (click)="deletePhoto(planta[organItem.value].imagine)" icon="pi pi-trash"></button>
             <div *ngIf="!planta[organItem.value].imagine" class="align-content-center m-4">
               <h5 class="p-2">Adaugă poză {{organItem.value}}</h5>
               <button pButton label="Din galerie" class="p-button-secondary m-1" (click)="fileInput.click()"
@@ -61,6 +74,9 @@
         </div>
       </p-tabPanel>
     </p-tabView>
+    <div *ngIf="planta.data" class="row text-center">
+      <p>Adăugată la data de: {{planta.data | date:'dd.MM.yyyy HH:mm'}}</p>
+    </div>
   </div>
 
   <div class="actions-bar">
@@ -69,7 +85,8 @@
     </div>
     <div>
       <button pButton label="Renunță" class="p-button-secondary" (click)="onCancel()" icon="pi pi-undo"></button>
-      <button pButton label="Salvează" class="p-button-success ms-2" (click)="onSave()" icon="pi pi-save"></button>
+      <button pButton label="Salvează" class="p-button-success ms-2" (click)="onSave()" icon="pi pi-save"
+        [disabled]="!planta.denumireStintifica || !planta.denumirePopulara"></button>
     </div>
   </div>
 </div>

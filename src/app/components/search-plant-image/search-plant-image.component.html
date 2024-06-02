@@ -10,7 +10,7 @@
   </div>
 
   <div *ngIf="planta.imageURL" class="col-12 text-end p-3">
-    <button pButton label="Adaugă detalii" class="p-button-success ms-2" (click)="continueSaving()"
+    <button pButton label="Adaugă detalii" class="p-button-success ms-2" (click)="onContinueSaving()"
       icon="pi pi-angle-right" iconPos="right"></button>
   </div>
 
@@ -30,11 +30,6 @@
     </div>
   </div>
 </div>
-
-<p-dialog class="dialog-details" header="Editează planta" [draggable]="false" [modal]="true"
-  [(visible)]="dialogDetailsVisible">
-  <plant-details [planta]="planta" (save)="onSave(planta)"></plant-details>
-</p-dialog>
 
 <input type="file" #cameraInput (change)="onFileSelected($event)" accept="image/*" capture="environment"
   style="display: none;" />
