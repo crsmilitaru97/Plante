@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -16,38 +18,43 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ImageModule } from 'primeng/image';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { MenuModule } from 'primeng/menu';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
+import { firebaseConfig } from 'src/environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LoginComponent } from './components/login/login.component';
 import { PlantDetailsComponent } from './components/plant-details/plant-details.component';
 import { SearchplantImageComponent } from './components/search-plant-image/search-plant-image.component';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCl1FBtBcDb_wfZpQH-zbmB0ffgWXpn35A",
-  authDomain: "plante-6e20f.firebaseapp.com",
-  databaseURL: "https://plante-6e20f-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "plante-6e20f",
-  storageBucket: "plante-6e20f.appspot.com",
-  messagingSenderId: "206298724136",
-  appId: "1:206298724136:web:ad2c40dee43521af45c21d"
-};
+import { AuthGuard } from './guards/auth.guard';
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
+
+const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: '', pathMatch: 'full' }
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     PlantDetailsComponent,
-    SearchplantImageComponent
+    SearchplantImageComponent,
+    LoginComponent,
+    DashboardComponent
   ],
   imports: [
+    [RouterModule.forRoot(routes)],
+
     AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule,
 
     AngularFireDatabaseModule,
-
     BrowserModule,
     AppRoutingModule,
     ButtonModule,
@@ -64,7 +71,8 @@ const storage = getStorage(app);
     ImageModule,
     ConfirmDialogModule,
     ColorPickerModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    MenuModule
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]

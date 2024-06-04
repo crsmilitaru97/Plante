@@ -36,18 +36,40 @@
     <p-tabView *ngIf="planta.floare" (onChange)="selectTab($event)">
       <p-tabPanel *ngFor="let organItem of organe" header="{{organItem.label}}">
         <div class="row">
-          <div class="col-md-8 col-lg-6 col-xl-5 button-col">
-            <span class="p-float-label">
-              <input class="p-inputwrapper-filled" [(colorPicker)]="planta[organItem.value].culoare"
-                [style.background]="planta[organItem.value].culoare" [cpPresetColors]="culori" cpColorMode="presets"
-                cpAlphaChannel="disabled" />
-              <label>Culoare</label>
-            </span>
-            <div class="pt-4 mt-1">
+          <div class="col-md-8 col-lg-6 col-xl-5">
+            <div class="row align-items-center">
+              <div class="col-3">
+                <span class="p-float-label color-circle">
+                  <input class="p-inputwrapper-filled" [(colorPicker)]="planta[organItem.value].culoare"
+                    [style.background]="planta[organItem.value].culoare ? planta[organItem.value].culoare : 'url(\'../../../assets/noColor.png\')'"
+                    [cpPresetColors]="culori" cpColorMode="presets" cpAlphaChannel="disabled" readonly />
+                  <label>Culoare</label>
+                </span>
+              </div>
+              <div class="col-9 pe-0">
+                <div class="row">
+                  <div class="col-12 button-col pe-0">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="marimi" [(ngModel)]="planta[organItem.value].marime" [showClear]="true"
+                        placeholder="Selectează o mărime" appendTo="body"></p-dropdown>
+                      <label>Mărime</label>
+                    </span>
+                  </div>
+                  <div class="col-12 button-col pe-0">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="tip" [(ngModel)]="planta[organItem.value].tip" [showClear]="true"
+                        placeholder="Selectează un tip" appendTo="body"></p-dropdown>
+                      <label>Tip</label>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="organItem.value=='frunză'" class="pt-4 mt-1">
               <span class="p-float-label">
-                <p-dropdown [options]="marimi" [(ngModel)]="planta[organItem.value].marime" [showClear]="true"
-                  placeholder="Selectează o mărime"></p-dropdown>
-                <label>Mărime</label>
+                <p-dropdown [options]="marginiFrunze" [(ngModel)]="planta[organItem.value].margine" [showClear]="true"
+                  placeholder="Selectează o margine" appendTo="body"></p-dropdown>
+                <label>Margine</label>
               </span>
             </div>
             <div class="pt-4 mt-1">
@@ -74,14 +96,17 @@
         </div>
       </p-tabPanel>
     </p-tabView>
-    <div *ngIf="planta.data" class="row text-center">
-      <p>Adăugată la data de: {{planta.data | date:'dd.MM.yyyy HH:mm'}}</p>
+    <div *ngIf="isSmallScreen && planta.data" class="row text-center">
+      <p>Adăugată la data de {{planta.data | date:'dd.MM.yyyy HH:mm'}} de către {{planta.adaugataDe || 'Anonim'}}
+      </p>
     </div>
   </div>
 
   <div class="actions-bar">
     <div>
       <button *ngIf="planta.id !=''" pButton class="p-button-danger" (click)="onDelete()" icon="pi pi-trash"></button>
+      <p *ngIf="!isSmallScreen && planta.data" class="added-by">Adăugată la data de {{planta.data |
+        date:'dd.MM.yyyy HH:mm'}} de către {{planta.adaugataDe || 'Anonim'}}</p>
     </div>
     <div>
       <button pButton label="Renunță" class="p-button-secondary" (click)="onCancel()" icon="pi pi-undo"></button>
@@ -91,6 +116,6 @@
   </div>
 </div>
 
-<input type="file" #cameraInput (change)="onFileSelected($event)" accept="image/*" capture="environment"
+<input value='' type="file" #cameraInput (change)="onFileSelected($event)" accept="image/*" capture="environment"
   style="display: none;" />
-<input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;" />
+<input value='' type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;" />

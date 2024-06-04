@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { b64toBlob, organe, resizeImage, setAllOrgans } from '../utils';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { organe } from '../nomenclatoare';
+import { b64toBlob, resizeImage, setAllOrgans } from '../utils';
 
 @Component({
   selector: 'search-plant-image',
@@ -7,11 +8,12 @@ import { b64toBlob, organe, resizeImage, setAllOrgans } from '../utils';
   styleUrls: ['./search-plant-image.component.scss']
 })
 export class SearchplantImageComponent implements OnInit {
+  @Input() public planta: any = {};
   @Output() public continueSaving = new EventEmitter();
   organe = organe;
-  planta: any = {};
 
   ngOnInit(): void {
+    this.planta = {};
   }
 
   onFileSelected(event: Event): void {
@@ -28,6 +30,7 @@ export class SearchplantImageComponent implements OnInit {
         }
       };
       reader.readAsDataURL(file);
+      input.value = '';
     }
   }
 

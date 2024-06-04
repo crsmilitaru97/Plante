@@ -2,8 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { AuthService } from 'src/app/services/auth.service';
 import { GeolocationService } from 'src/app/services/geolocation.service';
-import { culori, generateGuid, marimi, organe } from '../utils';
+import { culori, marginiFrunze, marimi, organe, tipFlori, tipFructe, tipFrunze, tipTulpini } from '../nomenclatoare';
+import { generateGuid } from '../utils';
 
 @Component({
   selector: 'plant-details',
@@ -14,6 +16,15 @@ export class PlantDetailsComponent implements OnInit {
   @Input() public planta: any = {};
   @Output() public cancel = new EventEmitter();
   @Output() public save = new EventEmitter<any>();
+  isSmallScreen: boolean = false;
+
+  tipFrunze = tipFrunze;
+  marginiFrunze = marginiFrunze;
+  tipFructe = tipFructe;
+  tipTulpini = tipTulpini;
+  tipFlori = tipFlori;
+  tip: any = tipFlori;
+
   selectedOrganValue = organe[0].value;
   database: string = 'prod';
 
@@ -23,11 +34,13 @@ export class PlantDetailsComponent implements OnInit {
 
   constructor(private db: AngularFireDatabase,
     private messageService: MessageService,
+    private authService: AuthService,
     private geolocation: GeolocationService,
     private confirmationService: ConfirmationService
   ) { }
 
   ngOnInit(): void {
+    this.isSmallScreen = window.screen.width < 1000;
     this.database = window.location.href.includes('localhost') ? 'test' : 'prod';
     this.planta = {};
   }
@@ -79,6 +92,11 @@ export class PlantDetailsComponent implements OnInit {
       this.uploadFileToFirebase('preview', previewPlanta, this.planta.id, imgPreview, planteDatabase);
       this.uploadFileToFirebase('imagine', this.planta, this.planta.id, imgFile, detaliiDatabase);
 
+      this.authService.getDisplayName().then(name => {
+        this.planta.adaugataDe = name;
+        this.db.object(detaliiDatabase).update(this.planta);
+      });
+
       this.messageService.add({ severity: 'success', summary: 'Succes', detail: 'Planta a fost salvată cu succes!' });
     }
     else {
@@ -95,7 +113,7 @@ export class PlantDetailsComponent implements OnInit {
     }
 
     const detaliiDatabase = `${this.database}/detalii/${this.planta.id}`;
-    this.organe.forEach(organ => {
+    this.organe.forEach((organ: any) => {
       if (this.planta[organ.value].imageFile) {
         this.addOrganPicture(organ.value, this.planta, detaliiDatabase);
       }
@@ -147,6 +165,24 @@ export class PlantDetailsComponent implements OnInit {
 
   selectTab(event: any) {
     this.selectedOrganValue = this.organe[event.index].value;
+    console.log(this.selectedOrganValue);
+    switch (this.selectedOrganValue) {
+      case 'frunză':
+        this.tip = tipFrunze;
+        break;
+      case 'fruct':
+        this.tip = tipFructe;
+        break;
+      case 'floare':
+        this.tip = tipFlori;
+        break;
+      case 'tulpină':
+        this.tip = tipTulpini;
+        break;
+      default:
+        this.tip = [];
+        break;
+    }
   }
 
   onFileSelected(event: Event): void {
@@ -159,6 +195,7 @@ export class PlantDetailsComponent implements OnInit {
         this.planta[this.selectedOrganValue].imagine = e.target?.result;
       };
       reader.readAsDataURL(file);
+      input.value = '';
     }
   }
 

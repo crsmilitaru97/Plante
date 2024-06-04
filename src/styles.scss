@@ -71,3 +71,21 @@ a {
   overflow: hidden;
   white-space: nowrap;
 }
+
+color-picker {
+
+  .box,
+  .preset-label,
+  hr {
+    display: none !important;
+  }
+
+  .preset-color {
+    width: 26px !important;
+    height: 26px !important;
+  }
+}
+
+.p-tabview-panels {
+  padding-inline: 0.5rem;
+}

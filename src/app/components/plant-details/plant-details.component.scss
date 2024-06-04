@@ -27,3 +27,34 @@
   right: 0;
   padding: 5px;
 }
+
+.color-circle {
+  ::ng-deep input {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border: 1px solid lightgray;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  ::ng-deep label {
+    left: 4px;
+  }
+}
+
+.no-color {
+  background: repeating-linear-gradient(45deg,
+      #ccc,
+      #ccc 10px,
+      #fff 10px,
+      #fff 20px);
+}
+
+.added-by {
+  display: inline-block;
+  height: 100%;
+  align-content: center;
+  margin: 0;
+  padding-left: 10px;
+}

@@ -1,0 +1,36 @@
+<div class="login-container">
+  <div class="login-card p-shadow-24">
+    <h2 class="mb-4">Login</h2>
+    <div class="p-fluid">
+      <div class="p-field pt-2">
+        <span class="p-float-label">
+          <input pInputText type="text" [(ngModel)]="displayName" />
+          <label>Nume utilizator</label>
+        </span>
+      </div>
+      <div class="p-field pt-2">
+        <span class="p-float-label">
+          <input pInputText type="email" [(ngModel)]="email" required />
+          <label>Email</label>
+        </span>
+      </div>
+      <div class="p-field pt-2">
+        <span class="p-float-label">
+          <input pInputText type="password" [(ngModel)]="password" required />
+          <label>Parolă</label>
+        </span>
+      </div>
+      <div class="p-field">
+        <button pButton class="p-button-success" label="Conectare" (click)="login()"></button>
+      </div>
+      <hr class="m-4">
+      <div class="p-field">
+        <button pButton type="button" label="Creează un cont nou" (click)="signup()"></button>
+      </div>
+      <div class="p-field">
+        <button pButton type="button" label="Înregistrează-te cu Google" icon="pi pi-google"
+          (click)="googleLogin()"></button>
+      </div>
+    </div>
+  </div>
+</div>
