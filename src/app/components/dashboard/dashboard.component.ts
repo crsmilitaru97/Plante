@@ -3,7 +3,7 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Router } from '@angular/router';
 import 'firebase/database';
 import { AuthService } from 'src/app/services/auth.service';
-import { organe } from '../nomenclatoare';
+import { culori, marimi, organe } from '../nomenclatoare';
 import { setAllOrgans } from '../utils';
 
 @Component({
@@ -27,12 +27,17 @@ export class DashboardComponent implements OnInit {
   filter = {
     denumireStintifica: '',
     denumirePopulara: '',
+    culoare: '',
   }
   userItems = [
     {
       label: 'Deconectare', icon: 'pi pi-sign-out', command: () => { this.signOut(); }
     },
   ];
+  planteDetaliate: any;
+
+  marimi = marimi;
+  culori = culori;
 
   constructor(
     private authService: AuthService,
@@ -88,7 +93,20 @@ export class DashboardComponent implements OnInit {
         this.filterPlants();
         this.isLoading = false;
       } else {
-        console.log("No recent plants available");
+        console.log("No plants available");
+      }
+    }).catch((error: any) => {
+      console.error("Error fetching data:", error);
+    });
+
+    this.loadDetailedPlants();
+  }
+
+  loadDetailedPlants() {
+    this.db.object(this.database + '/detalii').query.get().then((dataSnapshot: any) => {
+      if (dataSnapshot.exists()) {
+        const data = dataSnapshot.val();
+        this.planteDetaliate = Object.values(data);
       }
     }).catch((error: any) => {
       console.error("Error fetching data:", error);
@@ -101,17 +119,31 @@ export class DashboardComponent implements OnInit {
       this.filteredPlants = this.filteredPlants.filter(e => e.denumireStintifica.toLowerCase().includes(this.filter.denumireStintifica.toLowerCase()));
     if (this.filter.denumirePopulara)
       this.filteredPlants = this.filteredPlants.filter(e => e.denumirePopulara.toLowerCase().includes(this.filter.denumirePopulara.toLowerCase()));
+
+    this.filteredPlants = this.filteredPlants.sort((a, b) => {
+      return a.denumireStintifica.localeCompare(b.denumireStintifica);
+    });
   }
 
+  filterDetailedPlants() {
+    this.filteredPlants = [...this.plante];
+    const organ = 'floare';
+    if (this.filter.culoare) {
+      const plante = this.planteDetaliate.filter((e: any) => e[organ]?.culoare === this.filter.culoare);
+      this.filteredPlants = this.filteredPlants.filter(e => plante.some((p: { id: any; }) => p.id === e.id));
+    }
+  }
 
   editPlant(selectata: any) {
-
-    this.db.object(this.database + '/detalii/' + selectata.id).valueChanges()
+    const subscription = this.db.object(this.database + '/detalii/' + selectata.id).valueChanges()
       .subscribe((plant: any) => {
         if (plant) {
           this.plantaSelectata = plant;
           setAllOrgans(this.plantaSelectata);
           this.dialogDetailsVisible = true;
+
+          // Unsubscribe after processing the value
+          subscription.unsubscribe();
         }
       });
   }
@@ -127,6 +159,22 @@ export class DashboardComponent implements OnInit {
   }
 
   save(event: any) {
+    if (event) {
+      this.plante.push(event);
+      this.filterPlants();
+    }
+    this.dialogDetailsVisible = false;
+  }
+
+  modify(event: any) {
+    if (event) {
+      const index = this.plante.findIndex((e: any) => e.id === event.id);
+      if (index !== -1) {
+        this.plante[index].denumireStintifica = event.denumireStintifica;
+        this.plante[index].denumirePopulara = event.denumirePopulara;
+      }
+      this.filterPlants();
+    }
     this.dialogDetailsVisible = false;
   }
 

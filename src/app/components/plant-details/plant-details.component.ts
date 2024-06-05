@@ -5,7 +5,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 import { GeolocationService } from 'src/app/services/geolocation.service';
 import { culori, marginiFrunze, marimi, organe, tipFlori, tipFructe, tipFrunze, tipTulpini } from '../nomenclatoare';
-import { generateGuid } from '../utils';
 
 @Component({
   selector: 'plant-details',
@@ -16,6 +15,8 @@ export class PlantDetailsComponent implements OnInit {
   @Input() public planta: any = {};
   @Output() public cancel = new EventEmitter();
   @Output() public save = new EventEmitter<any>();
+  @Output() public modify = new EventEmitter<any>();
+
   isSmallScreen: boolean = false;
 
   tipFrunze = tipFrunze;
@@ -27,6 +28,7 @@ export class PlantDetailsComponent implements OnInit {
 
   selectedOrganValue = organe[0].value;
   database: string = 'prod';
+  isLoadingSave: boolean = false;
 
   marimi = marimi;
   culori = culori;
@@ -67,8 +69,9 @@ export class PlantDetailsComponent implements OnInit {
   }
 
   onSave() {
+    this.isLoadingSave = true;
     if (!this.planta.id || this.planta.id == '') {
-      this.planta.id = generateGuid();
+      this.planta.id = this.db.createPushId();
       this.planta.data = new Date();
 
       delete (this.planta.imageURL);
@@ -83,13 +86,14 @@ export class PlantDetailsComponent implements OnInit {
       this.db.object(detaliiDatabase).set(this.planta);
 
       const previewPlanta = {
+        id: this.planta.id,
         denumireStintifica: this.planta.denumireStintifica,
         denumirePopulara: this.planta.denumirePopulara
       }
       this.db.object(planteDatabase).set(previewPlanta);
+      this.uploadFileToFirebase('preview', previewPlanta, this.planta.id, imgPreview, planteDatabase);
 
       //this.setLocation(this.planta.id);
-      this.uploadFileToFirebase('preview', previewPlanta, this.planta.id, imgPreview, planteDatabase);
       this.uploadFileToFirebase('imagine', this.planta, this.planta.id, imgFile, detaliiDatabase);
 
       this.authService.getDisplayName().then(name => {
@@ -104,12 +108,15 @@ export class PlantDetailsComponent implements OnInit {
       const planteDatabase = `${this.database}/plante/${this.planta.id}`;
 
       const previewPlanta = {
+        id: this.planta.id,
         denumireStintifica: this.planta.denumireStintifica,
         denumirePopulara: this.planta.denumirePopulara
       }
       this.db.object(planteDatabase).update(previewPlanta);
       this.db.object(detaliiDatabase).update(this.planta);
       this.messageService.add({ severity: 'success', summary: 'Succes', detail: 'Detaliile plantei au fost modificate cu succes!' });
+      this.modify.emit(previewPlanta);
+      this.isLoadingSave = false;
     }
 
     const detaliiDatabase = `${this.database}/detalii/${this.planta.id}`;
@@ -118,8 +125,6 @@ export class PlantDetailsComponent implements OnInit {
         this.addOrganPicture(organ.value, this.planta, detaliiDatabase);
       }
     });
-
-    this.save.emit(this.planta);
   }
 
   async addOrganPicture(organSelectat: string, planta: any, outputPath: string) {
@@ -148,6 +153,10 @@ export class PlantDetailsComponent implements OnInit {
 
       planta[path] = downloadURL;
       await this.db.object(outputPath).update(planta);
+      if (path == 'preview') {
+        this.save.emit(planta);
+        this.isLoadingSave = false;
+      }
     } catch (error) {
       console.error('Upload failed', error);
     }
@@ -165,7 +174,6 @@ export class PlantDetailsComponent implements OnInit {
 
   selectTab(event: any) {
     this.selectedOrganValue = this.organe[event.index].value;
-    console.log(this.selectedOrganValue);
     switch (this.selectedOrganValue) {
       case 'frunză':
         this.tip = tipFrunze;

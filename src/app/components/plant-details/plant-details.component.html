@@ -68,7 +68,14 @@
             <div *ngIf="organItem.value=='frunză'" class="pt-4 mt-1">
               <span class="p-float-label">
                 <p-dropdown [options]="marginiFrunze" [(ngModel)]="planta[organItem.value].margine" [showClear]="true"
-                  placeholder="Selectează o margine" appendTo="body"></p-dropdown>
+                  placeholder="Selectează o margine" appendTo="body">
+                  <ng-template let-margine pTemplate="item">
+                    <div class="flex align-items-center gap-2">
+                      <img [src]="'../../../assets/marginiFrunze/' + margine.value + '.png'" style="width: 48px" />
+                      <div class="ps-2" style="display: inline;">{{ margine.label }}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
                 <label>Margine</label>
               </span>
             </div>
@@ -116,6 +123,10 @@
   </div>
 </div>
 
-<input value='' type="file" #cameraInput (change)="onFileSelected($event)" accept="image/*" capture="environment"
+<div class="disable" *ngIf="isLoadingSave">
+  <p-progressSpinner class="loading-over" *ngIf="isLoadingSave"></p-progressSpinner>
+</div>
+
+<input type="file" #cameraInput (change)="onFileSelected($event)" accept="image/*" capture="environment"
   style="display: none;" />
-<input value='' type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;" />
+<input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;" />

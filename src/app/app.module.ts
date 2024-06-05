@@ -30,6 +30,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PlantDetailsComponent } from './components/plant-details/plant-details.component';
 import { SearchplantImageComponent } from './components/search-plant-image/search-plant-image.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AccordionModule } from 'primeng/accordion';
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
@@ -72,7 +73,8 @@ const routes: Routes = [
     ConfirmDialogModule,
     ColorPickerModule,
     ProgressSpinnerModule,
-    MenuModule
+    MenuModule,
+    AccordionModule
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]

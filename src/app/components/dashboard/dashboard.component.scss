@@ -16,14 +16,13 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: #f5f5f5;
 }
 
 .content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  height: calc(100% - 74px);
 }
 
 .cap-title {
@@ -65,13 +64,14 @@
   display: grid;
   width: 100%;
   overflow-y: auto;
-  padding-inline: 10%;
+  padding-inline: 2%;
   grid-template-columns: repeat(auto-fit, minmax(145px, 155px));
   grid-auto-rows: 228px;
   gap: 10px;
   align-content: start;
   padding-top: 1rem;
   padding-bottom: 46px;
+  height: 100%;
 }
 
 .grid-item {
@@ -125,10 +125,6 @@
     padding-inline: 2% !important;
   }
 
-  .filter {
-    padding-inline: 3% !important;
-  }
-
   .dialog-photo-search,
   .dialog-details {
     ::ng-deep .p-dialog {
@@ -147,12 +143,7 @@
   height: 100%;
 }
 
-.filter {
-  padding-inline: 10%;
-  padding-top: 0.5rem;
-
-  .filter-col {
-    padding: 0.5rem;
-    padding-top: 1rem;
-  }
+.filter-col {
+  padding: 0.5rem;
+  padding-top: 1rem;
 }

@@ -14,68 +14,63 @@
       <button pButton icon="pi pi-user" (click)="userMenu.toggle($event)"></button>
     </div>
   </div>
+
   <div class="content pt-2">
     <p-progressSpinner class="loading" *ngIf="isLoading"></p-progressSpinner>
 
-    <!-- <div>
-      <h5 class="cap-title">Ultimele plante adăugate:</h5>
-      <div *ngIf="!isLoading && mostRecentPlants.length > 0 && viewType==='list'"
-        class="overflow-auto list-container h-100">
-        <div *ngFor="let item of mostRecentPlants" class="list-item" (click)="editPlant(item)">
-          <img [src]="item.preview" class="preview-image" loading="lazy" />
-          <div style="flex-direction: column;">
-            <h5 style="user-select: none;">{{ item.denumireStintifica }}</h5>
-            <h6 class="ellipsis" style="font-weight: 300; user-select: none;">{{ item.denumirePopulara }}</h6>
+    <div class="h-100">
+      <div class="row h-100">
+        <div class="col-lg-3 col-md-4 pt-3 pb-2" *ngIf="!isLoading && plante.length > 0">
+          <p-accordion [activeIndex]="0">
+            <p-accordionTab header="General">
+              <div class="row">
+                <div class="col-12 filter-col">
+                  <span class="p-float-label">
+                    <input pInputText [(ngModel)]="filter.denumireStintifica" (input)="filterPlants()" />
+                    <label>Denumire știntifică</label>
+                  </span>
+                </div>
+                <div class="col-12 filter-col">
+                  <span class="p-float-label">
+                    <input pInputText [(ngModel)]="filter.denumirePopulara" (input)="filterPlants()" />
+                    <label>Denumire populară</label>
+                  </span>
+                </div>
+              </div>
+            </p-accordionTab>
+            <p-accordionTab header="Floare">
+              <div class="filter-col">
+                <span class="p-float-label color-circle">
+                  <input class="p-inputwrapper-filled" [(colorPicker)]="filter.culoare"
+                    [style.background]="filter.culoare ? filter.culoare : 'url(\'../../../assets/noColor.png\')'"
+                    [cpPresetColors]="culori" cpColorMode="presets" cpAlphaChannel="disabled"
+                    (colorPickerChange)="filterDetailedPlants()" readonly />
+                  <label>Culoare</label>
+                </span>
+              </div>
+            </p-accordionTab>
+          </p-accordion>
+        </div>
+
+        <div class="col-lg-9 col-md-8 h-100" *ngIf="!isLoading && plante.length > 0">
+          <div *ngIf="!isLoading && filteredPlants.length > 0 && viewType==='list'"
+            class="overflow-auto list-container h-100">
+            <div *ngFor="let item of filteredPlants" class="list-item" (click)="editPlant(item)">
+              <img [src]="item.preview" class="preview-image" loading="lazy" />
+              <div style="flex-direction: column;">
+                <h5 style="user-select: none;">{{ item.denumireStintifica }}</h5>
+                <h6 class="ellipsis" style="font-weight: 300; user-select: none;">{{ item.denumirePopulara }}</h6>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div *ngIf="!isLoading && mostRecentPlants.length > 0 && viewType==='grid'"
-        class="overflow-auto grid-container h-100">
-        <div *ngFor="let item of mostRecentPlants" class="grid-item" (click)="editPlant(item)">
-          <img [src]="item.preview" class="preview-image" loading="lazy" />
-          <div class="text-start ps-2 w-100">
-            <h5>{{ item.denumireStintifica }}</h5>
-            <h6 class="ellipsis" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-    <div *ngIf="!isLoading && plante.length > 0">
-      <!-- <h5 class="cap-title">Toate plantele:</h5> -->
-      <div class="row filter">
-        <div class="col-md-5 col-lg-4 col-xl-3 filter-col">
-          <span class="p-float-label">
-            <input pInputText [(ngModel)]="filter.denumireStintifica" (input)="filterPlants()" />
-            <label>Denumire știntifică</label>
-          </span>
-        </div>
-        <div class="col-md-5 col-lg-4 col-xl-3 filter-col">
-          <span class="p-float-label">
-            <input pInputText [(ngModel)]="filter.denumirePopulara" (input)="filterPlants()" />
-            <label>Denumire populară</label>
-          </span>
-        </div>
-      </div>
-
-      <div *ngIf="!isLoading && filteredPlants.length > 0 && viewType==='list'"
-        class="overflow-auto list-container h-100">
-        <div *ngFor="let item of filteredPlants" class="list-item" (click)="editPlant(item)">
-          <img [src]="item.preview" class="preview-image" loading="lazy" />
-          <div style="flex-direction: column;">
-            <h5 style="user-select: none;">{{ item.denumireStintifica }}</h5>
-            <h6 class="ellipsis" style="font-weight: 300; user-select: none;">{{ item.denumirePopulara }}</h6>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="!isLoading && filteredPlants.length > 0 && viewType==='grid'" class="grid-container">
-        <div *ngFor="let item of filteredPlants" class="grid-item" (click)="editPlant(item)">
-          <img [src]="item.preview" class="preview-image" loading="lazy" />
-          <div class="text-start ps-2 w-100">
-            <h5>{{ item.denumireStintifica }}</h5>
-            <h6 class="ellipsis" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
+          <div *ngIf="!isLoading && filteredPlants.length > 0 && viewType==='grid'" class="grid-container h-100">
+            <div *ngFor="let item of filteredPlants" class="grid-item" (click)="editPlant(item)">
+              <img [src]="item.preview" class="preview-image" loading="lazy" />
+              <div class="text-start ps-2 w-100">
+                <h5>{{ item.denumireStintifica }}</h5>
+                <h6 class="ellipsis" style="font-weight: 300;">{{ item.denumirePopulara }}</h6>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -91,7 +86,7 @@
 
 <p-dialog class="dialog-details" header="Editează planta" [draggable]="false" [modal]="true"
   [(visible)]="dialogDetailsVisible">
-  <plant-details (cancel)="closeDialogs()" (save)="save($event)" [planta]="plantaSelectata"></plant-details>
+  <plant-details (cancel)="closeDialogs()" (save)="save($event)" (modify)="modify($event)" [planta]="plantaSelectata"></plant-details>
 </p-dialog>
 
 <p-dialog class="dialog-photo-search" header="Caută/adaugă plantă" [draggable]="false" [modal]="true"
