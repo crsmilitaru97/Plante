@@ -3,7 +3,7 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Router } from '@angular/router';
 import 'firebase/database';
 import { AuthService } from 'src/app/services/auth.service';
-import { culori, marimi, organe } from '../nomenclatoare';
+import { culori, marginiFrunze, marimi, organe, tipFlori, tipFructe, tipFrunze, tipTulpini } from '../nomenclatoare';
 import { setAllOrgans } from '../utils';
 
 @Component({
@@ -20,14 +20,14 @@ export class DashboardComponent implements OnInit {
   plantaSelectata: any;
   viewType: string = 'grid';
   dialogSearchPlantVisible: boolean = false;
+  addFilterDialogVisible: boolean = false;
   organe = organe;
   isLoading: boolean = true;
   database: string = 'prod';
   isSmallScreen: boolean = false;
   filter = {
-    denumireStintifica: '',
-    denumirePopulara: '',
-    culoare: '',
+    denumire: '',
+    criterii: [] as any
   }
   userItems = [
     {
@@ -38,6 +38,16 @@ export class DashboardComponent implements OnInit {
 
   marimi = marimi;
   culori = culori;
+
+
+  tipFrunze = tipFrunze;
+  marginiFrunze = marginiFrunze;
+  tipFructe = tipFructe;
+  tipTulpini = tipTulpini;
+  tipFlori = tipFlori;
+  tip: any = tipFlori;
+
+  newFilter: any = {};
 
   constructor(
     private authService: AuthService,
@@ -90,7 +100,7 @@ export class DashboardComponent implements OnInit {
         for (let i = 0; i < this.plante.length; i++) {
           this.plante[i].id = Object.keys(data)[i];
         }
-        this.filterPlants();
+        this.filteredPlants = [...this.plante];
         this.isLoading = false;
       } else {
         console.log("No plants available");
@@ -113,24 +123,20 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  filterPlants() {
-    this.filteredPlants = [...this.plante];
-    if (this.filter.denumireStintifica)
-      this.filteredPlants = this.filteredPlants.filter(e => e.denumireStintifica.toLowerCase().includes(this.filter.denumireStintifica.toLowerCase()));
-    if (this.filter.denumirePopulara)
-      this.filteredPlants = this.filteredPlants.filter(e => e.denumirePopulara.toLowerCase().includes(this.filter.denumirePopulara.toLowerCase()));
-
-    this.filteredPlants = this.filteredPlants.sort((a, b) => {
-      return a.denumireStintifica.localeCompare(b.denumireStintifica);
-    });
-  }
 
   filterDetailedPlants() {
     this.filteredPlants = [...this.plante];
-    const organ = 'floare';
-    if (this.filter.culoare) {
-      const plante = this.planteDetaliate.filter((e: any) => e[organ]?.culoare === this.filter.culoare);
-      this.filteredPlants = this.filteredPlants.filter(e => plante.some((p: { id: any; }) => p.id === e.id));
+    if (this.filter) {
+      let plante = this.planteDetaliate?.filter((e: any) => e.denumireStintifica?.includes(this.filter.denumire) || e.denumirePopulara?.includes(this.filter.denumire));
+      this.filter.criterii.forEach((criteriu: any) => {
+        if (criteriu.culoare)
+          plante = plante?.filter((e: any) => e[criteriu.organ]?.culoare == (criteriu.culoare));
+        if (criteriu.marime)
+          plante = plante?.filter((e: any) => e[criteriu.organ]?.marime == (criteriu.marime));
+        if (criteriu.tip)
+          plante = plante?.filter((e: any) => e[criteriu.organ]?.tip == (criteriu.tip));
+      });
+      this.filteredPlants = this.filteredPlants?.filter(e => plante.some((p: { id: any; }) => p.id === e.id));
     }
   }
 
@@ -153,15 +159,39 @@ export class DashboardComponent implements OnInit {
     this.dialogSearchPlantVisible = true;
   }
 
+  addFilter() {
+    this.newFilter = {};
+    this.addFilterDialogVisible = true;
+  }
+
+  addNewFilter() {
+    this.closeDialogs();
+    this.newFilter.label = this.newFilter.organ;
+    if (this.newFilter.marime || this.newFilter.tip)
+      this.newFilter.label += ` - `;
+
+    if (this.newFilter.marime)
+      this.newFilter.label += `Mărime ${this.newFilter.marime.toLowerCase()}`
+    if (this.newFilter.tip)
+      this.newFilter.label += (this.newFilter.marime ? ', ' : '') + `Tip ${this.newFilter.tip.toLowerCase()}`
+
+    this.newFilter.label = this.newFilter.label.charAt(0).toUpperCase() + this.newFilter.label.slice(1);
+    this.filter.criterii.push(this.newFilter);
+  }
+
   closeDialogs() {
     this.dialogDetailsVisible = false;
     this.dialogSearchPlantVisible = false;
+    this.addFilterDialogVisible = false;
+  }
+
+  removeCheckbox(item: any) {
+    this.filter.criterii = this.filter.criterii.filter((criteriu: any) => criteriu !== item);
   }
 
   save(event: any) {
     if (event) {
       this.plante.push(event);
-      this.filterPlants();
     }
     this.dialogDetailsVisible = false;
   }
@@ -173,7 +203,6 @@ export class DashboardComponent implements OnInit {
         this.plante[index].denumireStintifica = event.denumireStintifica;
         this.plante[index].denumirePopulara = event.denumirePopulara;
       }
-      this.filterPlants();
     }
     this.dialogDetailsVisible = false;
   }
@@ -189,6 +218,26 @@ export class DashboardComponent implements OnInit {
       this.viewType = "grid";
     }
     else this.viewType = "list";
+  }
+
+  selectOrgan(event: any) {
+    switch (event.value) {
+      case 'frunză':
+        this.tip = tipFrunze;
+        break;
+      case 'fruct':
+        this.tip = tipFructe;
+        break;
+      case 'floare':
+        this.tip = tipFlori;
+        break;
+      case 'tulpină':
+        this.tip = tipTulpini;
+        break;
+      default:
+        this.tip = [];
+        break;
+    }
   }
 }
 

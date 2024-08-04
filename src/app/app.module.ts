@@ -74,7 +74,7 @@ const routes: Routes = [
     ColorPickerModule,
     ProgressSpinnerModule,
     MenuModule,
-    AccordionModule
+    AccordionModule,
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]

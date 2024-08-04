@@ -119,6 +119,14 @@
   }
 }
 
+.dialog-addFilter {
+  ::ng-deep .p-dialog {
+    min-width: 20%;
+    height: fit-content;
+    max-height: none !important;
+  }
+}
+
 @media (max-width: 1000px) {
 
   .list-container {
@@ -133,6 +141,12 @@
       max-height: none !important;
     }
   }
+
+  .dialog-addFilter {
+    ::ng-deep .p-dialog {
+      width: 90%;
+    }
+  }
 }
 
 .loading {
@@ -143,7 +157,18 @@
   height: 100%;
 }
 
-.filter-col {
-  padding: 0.5rem;
-  padding-top: 1rem;
+.criteriu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--surface-400);
+
+  .culoare {
+    width: 28px;
+    height: 28px;
+    border-radius: 30px;
+    border: solid 1px lightgray;
+  }
 }
