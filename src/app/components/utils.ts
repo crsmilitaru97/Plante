@@ -65,3 +65,12 @@ export function b64toBlob(base64: string, contentType = '', sliceSize = 512): Bl
   }
   return new Blob(byteArrays, { type: contentType });
 }
+
+export async function fetchImage(url: string): Promise<string | null> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    return null;
+  }
+  const blob = await response.blob();
+  return URL.createObjectURL(blob);
+}

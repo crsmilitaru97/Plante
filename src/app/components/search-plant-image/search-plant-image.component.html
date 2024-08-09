@@ -16,16 +16,22 @@
 
   <div *ngIf="planta.imageURL" class="col-12 pt-2">
     <h4>Plante asemănătoare</h4>
-    <div *ngIf="!true" class="col-12 text-end pt-2">
-      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
-      <img #imgPreview *ngIf="planta.imageURL" class="preview-image mb-3" />
+    <p-progressSpinner class="m-4 loading" *ngIf="isLoading"></p-progressSpinner>
+
+    <div *ngIf="!isLoading && similarPlants.length > 0" class="grid-container h-100" style="max-height: 290px;">
+      <div *ngFor="let plant of similarPlants" class="grid-item" (click)="editSimilarPlant(plant.plant)">
+        <div class="image-container">
+          <img [src]="plant.plant?.downloadedImage" class="preview-image" loading="lazy" />
+          <h5 class="overlay-text">{{100 - plant.difference}}%</h5>
+        </div>
+        <div class="text-start ps-2 w-100">
+          <h5>{{ plant.plant?.denumireStintifica }}</h5>
+          <h6 class="ellipsis" style="font-weight: 300;">{{ plant.plant?.denumirePopulara }}</h6>
+        </div>
+      </div>
     </div>
-    <div *ngIf="true" class="col-12 text-center p-4">
+
+    <div *ngIf="!isLoading && similarPlants.length == 0" class="col-12 text-center p-4">
       <h5 style="font-weight: 400;">Nu au fost găsite plante asemănătoare</h5>
     </div>
   </div>

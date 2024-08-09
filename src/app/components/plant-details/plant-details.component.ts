@@ -25,6 +25,8 @@ export class PlantDetailsComponent implements OnInit {
   tipTulpini = tipTulpini;
   tipFlori = tipFlori;
   tip: any = tipFlori;
+  
+  loadingImage: boolean = true;
 
   selectedOrganValue = organe[0].value;
   database: string = 'prod';

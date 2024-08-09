@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import 'firebase/database';
 import { AuthService } from 'src/app/services/auth.service';
 import { culori, marginiFrunze, marimi, organe, tipFlori, tipFructe, tipFrunze, tipTulpini } from '../nomenclatoare';
-import { setAllOrgans } from '../utils';
+import { fetchImage, setAllOrgans } from '../utils';
 
 @Component({
   selector: 'dashboard',
@@ -101,6 +101,7 @@ export class DashboardComponent implements OnInit {
           this.plante[i].id = Object.keys(data)[i];
         }
         this.filteredPlants = [...this.plante];
+        this.loadAllImages();
         this.isLoading = false;
       } else {
         console.log("No plants available");
@@ -110,6 +111,12 @@ export class DashboardComponent implements OnInit {
     });
 
     this.loadDetailedPlants();
+  }
+
+  async loadAllImages() {
+    for (const plant of this.plante) {
+      plant.downloadedImage = await fetchImage(plant.preview);
+    }
   }
 
   loadDetailedPlants() {
@@ -141,6 +148,7 @@ export class DashboardComponent implements OnInit {
   }
 
   editPlant(selectata: any) {
+    this.closeDialogs();
     const subscription = this.db.object(this.database + '/detalii/' + selectata.id).valueChanges()
       .subscribe((plant: any) => {
         if (plant) {

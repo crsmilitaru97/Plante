@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-
+@use 'src/app/components/gridlist' as *;
 
 .card {
   background: var(--surface-card);
@@ -54,11 +54,11 @@ h4 {
 }
 
 h5 {
-  font-size: 1.1rem;
+  font-size: medium;
 }
 
 h6 {
-  font-size: 0.9rem;
+  font-size: small;
 }
 
 a {
