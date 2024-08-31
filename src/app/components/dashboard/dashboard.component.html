@@ -127,11 +127,39 @@
         <label>Mărime</label>
       </span>
     </div>
-    <div class="mt-4">
+    <div *ngIf="selectedOrganValue != 'floare'" class="mt-4">
       <span class="p-float-label">
         <p-dropdown [(ngModel)]="newFilter.tip" [options]="tip" [showClear]="true" placeholder="Selectează un tip"
           appendTo="body"></p-dropdown>
         <label>Tip</label>
+      </span>
+    </div>
+    <div *ngIf="selectedOrganValue == 'floare'" class="mt-4">
+      <span class="p-float-label">
+        <p-dropdown [options]="inflorescente" [(ngModel)]="newFilter.inflorescenta" [showClear]="true"
+          placeholder="Selectează inflorescență" appendTo="body"></p-dropdown>
+        <label>Inflorescență</label>
+      </span>
+    </div>
+    <div *ngIf="selectedOrganValue == 'floare'" class="mt-4">
+      <span class="p-float-label">
+        <p-dropdown [options]="flori" [(ngModel)]="newFilter.floare" [showClear]="true" placeholder="Selectează floare"
+          appendTo="body"></p-dropdown>
+        <label>Floare</label>
+      </span>
+    </div>
+    <div *ngIf="selectedOrganValue == 'frunză'" class="mt-4">
+      <span class="p-float-label">
+        <p-dropdown [options]="marginiFrunze" [(ngModel)]="newFilter.margine" [showClear]="true"
+          placeholder="Selectează o margine" appendTo="body">
+          <ng-template let-margine pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <img [src]="'../../../assets/marginiFrunze/' + margine.value + '.png'" style="width: 48px" />
+              <div class="ps-2" style="display: inline;">{{ margine.label }}</div>
+            </div>
+          </ng-template>
+        </p-dropdown>
+        <label>Margine</label>
       </span>
     </div>
   </div>

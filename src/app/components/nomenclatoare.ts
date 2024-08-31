@@ -56,14 +56,50 @@ export const tipTulpini = [
   { label: 'Cladode', value: "cladode" }
 ];
 
-export const tipFlori = [
-  { label: 'Simple', value: "simple" },
-  { label: 'Duble', value: "duble" },
-  { label: 'Radiale (actinomorfe)', value: "radiale" },
-  { label: 'Bilaterale (zigomorfe)', value: "bilaterale" },
-  { label: 'Solitare', value: "solitare" },
-  { label: 'Inflorescențe', value: "inflorescente" },
-  { label: 'Compuse', value: "compuse" },
-  { label: 'Masculine', value: "masculine" },
-  { label: 'Feminine', value: "feminine" }
+// export const tipFlori = [
+//   { label: 'Simple', value: "simple" },
+//   { label: 'Duble', value: "duble" },
+//   { label: 'Radiale (actinomorfe)', value: "radiale" },
+//   { label: 'Bilaterale (zigomorfe)', value: "bilaterale" },
+//   { label: 'Solitare', value: "solitare" },
+//   { label: 'Inflorescențe', value: "inflorescente" },
+//   { label: 'Compuse', value: "compuse" },
+//   { label: 'Masculine', value: "masculine" },
+//   { label: 'Feminine', value: "feminine" }
+// ];
+
+export const tipInflorescenta = [
+  { label: 'Racem', value: "racem" },
+  { label: 'Corimb', value: "corimb" },
+  { label: 'Umbela', value: "umbela" },
+  { label: 'Spic', value: "spic" },
+  { label: 'Capitul', value: "capitul" },
+  { label: 'Antodiu', value: "antodiu" },
+  { label: 'Ament', value: "ament" },
+  { label: 'Spadice', value: "spadice" },
+  { label: 'Racem compus', value: "racem_compus" },
+  { label: 'Corimb compus', value: "corimb_compus" },
+  { label: 'Umbela compusa', value: "umbela_compusa" },
+  { label: 'Spic compus', value: "spic_compus" },
+  { label: 'Panicul cu spiculate', value: "panicul_cu_spiculate" },
+  { label: 'Panicul spiciform', value: "panicul_spiciform" },
+  { label: 'Panicul', value: "panicul" },
+  { label: 'Monocaziu', value: "monocaziu" },
+  { label: 'Dicaziu', value: "dicaziu" },
+  { label: 'Pleiocaziu', value: "pleiocaziu" },
+  { label: 'Racem cu dicazii', value: "racem_cu_dicazii" },
+  { label: 'Umbela cu cime elicoidale', value: "umbela_cu_cime_elicoidale" },
+  { label: 'Corimb cu calatidii', value: "corimb_cu_calatidii" }
+];
+
+export const tipFloare = [
+  { label: 'Petale egale', value: "petale_egale" },
+  { label: 'Petale inegale', value: "petale_inegale" },
+  { label: 'Rotata', value: "rotata" },
+  { label: 'Hipocrateriforma', value: "hipocrateriforma" },
+  { label: 'Infundibuliforma', value: "infundibuliforma" },
+  { label: 'Tubuloasa', value: "tubuloasa" },
+  { label: 'Urceolata', value: "urceolata" },
+  { label: 'Ligulata', value: "ligulata" },
+  { label: 'Bilabiata', value: "bilabiata" }
 ];

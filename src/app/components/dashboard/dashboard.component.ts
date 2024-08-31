@@ -3,7 +3,7 @@ import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { Router } from '@angular/router';
 import 'firebase/database';
 import { AuthService } from 'src/app/services/auth.service';
-import { culori, marginiFrunze, marimi, organe, tipFlori, tipFructe, tipFrunze, tipTulpini } from '../nomenclatoare';
+import { culori, marginiFrunze, marimi, organe, tipFloare, tipFructe, tipFrunze, tipInflorescenta, tipTulpini } from '../nomenclatoare';
 import { fetchImage, setAllOrgans } from '../utils';
 
 @Component({
@@ -39,13 +39,16 @@ export class DashboardComponent implements OnInit {
   marimi = marimi;
   culori = culori;
 
+  selectedOrganValue: any = organe[0].value;
 
   tipFrunze = tipFrunze;
   marginiFrunze = marginiFrunze;
   tipFructe = tipFructe;
   tipTulpini = tipTulpini;
-  tipFlori = tipFlori;
-  tip: any = tipFlori;
+  inflorescente = tipInflorescenta;
+  flori = tipFloare;
+
+  tip: any;
 
   newFilter: any = {};
 
@@ -114,9 +117,10 @@ export class DashboardComponent implements OnInit {
   }
 
   async loadAllImages() {
-    for (const plant of this.plante) {
+    const fetchPromises = this.plante.map(async (plant) => {
       plant.downloadedImage = await fetchImage(plant.preview);
-    }
+    });
+    await Promise.all(fetchPromises);
   }
 
   loadDetailedPlants() {
@@ -142,6 +146,12 @@ export class DashboardComponent implements OnInit {
           plante = plante?.filter((e: any) => e[criteriu.organ]?.marime == (criteriu.marime));
         if (criteriu.tip)
           plante = plante?.filter((e: any) => e[criteriu.organ]?.tip == (criteriu.tip));
+        if (criteriu.inflorescenta)
+          plante = plante?.filter((e: any) => e[criteriu.organ]?.inflorescenta == (criteriu.inflorescenta));
+        if (criteriu.floare)
+          plante = plante?.filter((e: any) => e[criteriu.organ]?.floare == (criteriu.floare));
+        if (criteriu.margine)
+          plante = plante?.filter((e: any) => e[criteriu.organ]?.margine == (criteriu.margine));
       });
       this.filteredPlants = this.filteredPlants?.filter(e => plante.some((p: { id: any; }) => p.id === e.id));
     }
@@ -175,13 +185,18 @@ export class DashboardComponent implements OnInit {
   addNewFilter() {
     this.closeDialogs();
     this.newFilter.label = this.newFilter.organ;
-    if (this.newFilter.marime || this.newFilter.tip)
+    if (this.newFilter.marime || this.newFilter.tip || this.newFilter.inflorescenta || this.newFilter.floare || this.newFilter.margine)
       this.newFilter.label += ` - `;
-
     if (this.newFilter.marime)
-      this.newFilter.label += `Mărime ${this.newFilter.marime.toLowerCase()}`
+      this.newFilter.label += (this.newFilter.label.endsWith(' - ') ? '' : ', ') + `Mărime ${this.newFilter.marime.toLowerCase()}`
     if (this.newFilter.tip)
-      this.newFilter.label += (this.newFilter.marime ? ', ' : '') + `Tip ${this.newFilter.tip.toLowerCase()}`
+      this.newFilter.label += (this.newFilter.label.endsWith(' - ') ? '' : ', ') + `Tip ${this.newFilter.tip.toLowerCase()}`
+    if (this.newFilter.inflorescenta)
+      this.newFilter.label += (this.newFilter.label.endsWith(' - ') ? '' : ', ') + `Infl. ${this.newFilter.inflorescenta.toLowerCase()}`
+    if (this.newFilter.floare)
+      this.newFilter.label += (this.newFilter.label.endsWith(' - ') ? '' : ', ') + `Floare ${this.newFilter.floare.toLowerCase()}`
+    if (this.newFilter.margine)
+      this.newFilter.label += (this.newFilter.label.endsWith(' - ') ? '' : ', ') + `Margine ${this.newFilter.margine.toLowerCase()}`
 
     this.newFilter.label = this.newFilter.label.charAt(0).toUpperCase() + this.newFilter.label.slice(1);
     this.filter.criterii.push(this.newFilter);
@@ -229,15 +244,13 @@ export class DashboardComponent implements OnInit {
   }
 
   selectOrgan(event: any) {
-    switch (event.value) {
+    this.selectedOrganValue = event.value;
+    switch (this.selectedOrganValue) {
       case 'frunză':
         this.tip = tipFrunze;
         break;
       case 'fruct':
         this.tip = tipFructe;
-        break;
-      case 'floare':
-        this.tip = tipFlori;
         break;
       case 'tulpină':
         this.tip = tipTulpini;

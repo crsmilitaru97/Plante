@@ -4,7 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 import { GeolocationService } from 'src/app/services/geolocation.service';
-import { culori, marginiFrunze, marimi, organe, tipFlori, tipFructe, tipFrunze, tipTulpini } from '../nomenclatoare';
+import { culori, marginiFrunze, marimi, organe, tipFloare, tipFructe, tipFrunze, tipInflorescenta, tipTulpini } from '../nomenclatoare';
 
 @Component({
   selector: 'plant-details',
@@ -23,9 +23,10 @@ export class PlantDetailsComponent implements OnInit {
   marginiFrunze = marginiFrunze;
   tipFructe = tipFructe;
   tipTulpini = tipTulpini;
-  tipFlori = tipFlori;
-  tip: any = tipFlori;
-  
+  inflorescente = tipInflorescenta;
+  flori = tipFloare;
+  tip: any;
+
   loadingImage: boolean = true;
 
   selectedOrganValue = organe[0].value;
@@ -182,9 +183,6 @@ export class PlantDetailsComponent implements OnInit {
         break;
       case 'fruct':
         this.tip = tipFructe;
-        break;
-      case 'floare':
-        this.tip = tipFlori;
         break;
       case 'tulpină':
         this.tip = tipTulpini;

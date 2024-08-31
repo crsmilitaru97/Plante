@@ -55,11 +55,25 @@
                       <label>Mărime</label>
                     </span>
                   </div>
-                  <div class="col-12 button-col pe-0">
+                  <div *ngIf="selectedOrganValue != 'floare'" class="col-12 button-col pe-0">
                     <span class="p-float-label">
                       <p-dropdown [options]="tip" [(ngModel)]="planta[organItem.value].tip" [showClear]="true"
                         placeholder="Selectează un tip" appendTo="body"></p-dropdown>
                       <label>Tip</label>
+                    </span>
+                  </div>
+                  <div *ngIf="selectedOrganValue == 'floare'" class="col-12 button-col pe-0">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="inflorescente" [(ngModel)]="planta[organItem.value].inflorescenta"
+                        [showClear]="true" placeholder="Selectează inflorescență" appendTo="body"></p-dropdown>
+                      <label>Inflorescență</label>
+                    </span>
+                  </div>
+                  <div *ngIf="selectedOrganValue == 'floare'" class="col-12 button-col pe-0">
+                    <span class="p-float-label">
+                      <p-dropdown [options]="flori" [(ngModel)]="planta[organItem.value].floare" [showClear]="true"
+                        placeholder="Selectează floare" appendTo="body"></p-dropdown>
+                      <label>Floare</label>
                     </span>
                   </div>
                 </div>
