@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'src/app/components/gridlist' as *;
+@import "./assets/scrollbar.scss";
 
 .card {
   background: var(--surface-card);

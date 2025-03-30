@@ -120,20 +120,6 @@
         <label>Culoare</label>
       </span>
     </div>
-    <div class="mt-4">
-      <span class="p-float-label">
-        <p-dropdown [(ngModel)]="newFilter.marime" [options]="marimi" [showClear]="true"
-          placeholder="Selectează o mărime" appendTo="body"></p-dropdown>
-        <label>Mărime</label>
-      </span>
-    </div>
-    <div *ngIf="selectedOrganValue != 'floare'" class="mt-4">
-      <span class="p-float-label">
-        <p-dropdown [(ngModel)]="newFilter.tip" [options]="tip" [showClear]="true" placeholder="Selectează un tip"
-          appendTo="body"></p-dropdown>
-        <label>Tip</label>
-      </span>
-    </div>
     <div *ngIf="selectedOrganValue == 'floare'" class="mt-4">
       <span class="p-float-label">
         <p-dropdown [options]="inflorescente" [(ngModel)]="newFilter.inflorescenta" [showClear]="true"
@@ -146,6 +132,20 @@
         <p-dropdown [options]="flori" [(ngModel)]="newFilter.floare" [showClear]="true" placeholder="Selectează floare"
           appendTo="body"></p-dropdown>
         <label>Floare</label>
+      </span>
+    </div>
+    <div class="mt-4">
+      <span class="p-float-label">
+        <p-dropdown [(ngModel)]="newFilter.marime" [options]="marimi" [showClear]="true"
+          placeholder="Selectează o mărime" appendTo="body"></p-dropdown>
+        <label>Mărime</label>
+      </span>
+    </div>
+    <div *ngIf="selectedOrganValue != 'floare'" class="mt-4">
+      <span class="p-float-label">
+        <p-dropdown [(ngModel)]="newFilter.tip" [options]="tip" [showClear]="true" placeholder="Selectează un tip"
+          appendTo="body"></p-dropdown>
+        <label>Tip</label>
       </span>
     </div>
     <div *ngIf="selectedOrganValue == 'frunză'" class="mt-4">
